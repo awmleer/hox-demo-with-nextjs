@@ -1,6 +1,13 @@
 import Head from 'next/head'
+import {useEffect} from 'react'
+import {useCounterModel} from '../models/counter'
 
-export default function Home() {
+export default function Home(props) {
+  const counter = useCounterModel()
+  useEffect(() => {
+    counter.setCount(props.countFrom)
+  }, [])
+  
   return (
     <div className="container">
       <Head>
@@ -11,6 +18,7 @@ export default function Home() {
       <main>
         <h1 className="title">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
+          {counter.count}
         </h1>
 
         <p className="description">
@@ -206,4 +214,10 @@ export default function Home() {
       `}</style>
     </div>
   )
+}
+
+export async function getServerSideProps() {
+  const countFrom = 123
+
+  return { props: { countFrom } }
 }
